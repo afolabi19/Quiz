@@ -1,59 +1,42 @@
 questionIdCounter = 0
 
 var questionObj = [
-    { 
-        question: "2+2?",
-        opton1 : "1",
-        opton2 : "2", 
-        opton3 : "4",
-        opton4 : "3"
+{ 
+    question: "Question 1 2+2?",
+    option: [ "1",  "2",  "4", "5" ],
+    answers: "4"
+            },
+
+
+{ 
+    question: "Question 2 2/2?",
+    option: [ "3",  "2",  "4", "1"  ],
+    answers: "1"
         },
-    
-    
 
 { 
-    question: "2/2?",
-    answers: [
-    {option1: "1", correct: true},    
-    {option2: "2", correct: false},
-    {option3: "4", correct: false},
-    {option4: "3", correct: false},
-    ]
-
-},
+    question: "Question 3 2-2?",
+    option: [ "0",  "2",  "4", "5"  ],
+    answers: "0"
+        },
 
 { 
-    question: "2-2?",
-    answers: [
-    {option1: "1", correct: false},
-    {option2: "0", correct: true},
-    {option3: "4", correct: false},
-    {option4: "3", correct: false},
-    ]
-
-},
-
-{ 
-    question: "2*2?",
-    answers: [
-    {option1: "1", correct: false},
-    {option2: "2", correct: false},
-    {option3: "4", correct: true},    
-    {option4: "3", correct: false},
-    ]
-}
-
+    question: "Question 4 2*2?",
+    option: [ "1232",  "2",  "4", "42" ],
+    answers: "4"
+        },
 ]
-
-questionObj.id = questionIdCounter;
-
-questionIdCounter++;
 
 
 var optionSection = document.querySelector(".option")
 var timeSection = document.querySelector(".time")
 var modalHeader = document.querySelector(".modal-header")
 var modalfooter = document.querySelector(".modal-footer")
+var optionSectionOl = document.querySelector("ol")
+
+
+
+
 
 var loadTimer = function(){
 
@@ -85,67 +68,97 @@ var loadTimer = function(){
 
 var loadquestions = function(){
 
-    for ( var i=0; i < questionObj.length; i++){
+    console.log(questionIdCounter)
 
-        console.log(questionObj[i].question)
-        
-        // questiions
+    for ( var i = 0; i < questionObj[questionIdCounter].question.length; i++){ 
 
-       
-        modalHeader.textContent = questionObj[i].question;
-
-   
 
         
+        modalHeader.textContent = questionObj[questionIdCounter].question;}
 
-    }
-
-    // return questionSection
 }
 
 var loadOptions = function () {
 
-    for ( var i=0; i < questionObj.length; i++){
+    for ( var i=0; i < questionObj[questionIdCounter].option.length; i++){
 
-        // Options
-
-        console.log(JSON.parse(questionObj[i].answers))
-      
-        var optionSectionEol = document.createElement("ol");
+    
         var optionSectionElli = document.createElement("li");
         var optionSectionElBtn = document.createElement("button");
-
-        optionbuttonList = optionSectionElli.appendChild(optionSectionElBtn)
-        optionSelection = optionSectionEol.appendChild(optionbuttonList)
-        optionSelection.className ="btn btn-primary";
         
-        optionSelection.setAttribute("value", questionObj[i].answers)
-        optionSelection.textContent = questionObj[i].answers
 
-        optionSection.appendChild(optionSelection)
-        
+    
+            optionSectionElBtn.textContent = questionObj[questionIdCounter].option[i]; ;
+
+ 
+            optionSectionElBtn.className = "btn btn-primary modal-footer"
+
+            optionSectionElBtn.value = optionSectionElBtn.textContent
+
+            optionSectionElBtn.id = optionSectionElBtn.value
+            
+            optionSectionElli.appendChild(optionSectionElBtn)
+
+            optionSectionOl.appendChild(optionSectionElli)
+
+            optionSection.appendChild(optionSectionOl)
+
+            $(".modal-footer").on("click", handler_nextquestion)
+
+ 
+            
          console.log(optionSection)
 
     }
 }
 
-var loadQuestionresult = function (){}
+var loadQuestionresult = function (){
 
-$(".modal-footer").on("click", function()
 
-{ 
+    modalfooter.textContent = questionObj[questionIdCounter].answers;
+
+   
+
+
+
+// }
+//     for ( var i=0; i < questionObj[questionIdCounter].answers.length; i++){
+
+//         console.log(questionObj[questionIdCounter].answers[i])
+
+//         console.log(selectedButton)
+
+//         var a = selectedButton
+
+//         var b = questionObj[questionIdCounter].answers[i].textContent
+
+//         console.log(b)
+
+//     if (selectedButton.textContent === questionObj[questionIdCounter].answers[i].textContent) {
+
+        
+
+//         modalfooter.textContent = "Previous answer was right"
+//     } else {
+
+//         modalfooter.textContent = "Previous answer was wrong"
+//     }
+
+//     }
+}
+
+var handler_start = function(){ 
+
     $(".modal-footer").empty()
     $(".option").empty()
     
     loadTimer()
     loadquestions ()
     loadOptions ()
-    
 
     console.log(modalfooter)
 
-})
-
+}
 
 var startquiz = function() {
 
@@ -155,15 +168,32 @@ var startquiz = function() {
 
     var startButtonEl = document.createElement("button");
     startButtonEl.textContent = "Start";
-    startButtonEl.className = "btn btn-primary";
+    startButtonEl.className = "btn btn-primary start";
 
     modalfooter.appendChild(startButtonEl);
+
+    $(".modal-footer").on("click", handler_start)
 
 }
 
 
-//when the button the start button is clicked 
-// questionSection.addEventListener("click", loadquestions);
+var handler_nextquestion = function()
+
+{
+  
+    loadQuestionresult()
+
+    $("li").remove()
+
+    questionIdCounter++;
+
+    console.log(questionIdCounter)
+
+    loadquestions ()
+    loadOptions ()
+
+}
+
 
 //load the page with a start button availabe
 startquiz()
